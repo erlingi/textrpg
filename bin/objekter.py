@@ -27,9 +27,9 @@ class Player:
 	def getInventory(self):
 		print("Equipped weapon: {}".format(self.weapon.name))
 		for x in self.inventory:
-			if x.type == 1:
+			if x.hvilken == 1:
 				print(x.name, x.dmg, x.cost)
-			elif x.type == 2:
+			elif x.hvilken == 2 or x.hvilken == 3:
 				print(x.name, x.attribute)
 
 	def setHealth(self, newHealth):
@@ -78,7 +78,7 @@ class Player:
 		self.life -= 1
 		if self.life == 0:
 			print("You have no remaining lifes. You start over.")
-			# start over from beginning function
+			exit()
 		else:
 			print("You have {} lifes remaining.".format(self.life))
 
@@ -89,14 +89,14 @@ class Weapon:
 		self.name = name
 		self.dmg = dmg
 		self.cost = cost
-		self.type = 1
+		self.hvilken = 1
 
 # consumable class
 class Consumable:
-	def __init__(self, name, attribute):
+	def __init__(self, name, attribute, hvilken):
 		self.name = name
 		self.attribute = attribute
-		self.type = 2
+		self.hvilken = hvilken
 
 
 
@@ -108,6 +108,7 @@ class Monster:
 		self.health = health
 		self.loot = []
 		self.alive = True
+		self.looted = False
 
 	def addLoot(self, lootAdd):
 		self.lootAdd = lootAdd
@@ -115,9 +116,9 @@ class Monster:
 
 	def getLoot(self):
 		for x in self.loot:
-			if x.type == 1:
+			if x.hvilken == 1:
 				print(x.name, x.dmg, x.cost)
-			elif x.type == 2:
+			elif x.hvilken == 2 or 3:
 				print(x.name, x.attribute)
 
 	def monsterAttack(self):

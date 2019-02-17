@@ -6,17 +6,37 @@ import time
 
 def runtime(spillerObjekt):
 	choice = raw_input("CHOICE: ")
+	
 	if choice == "status":
+
 		print("------------------------------")
 		print(spillerObjekt.status())
 		print("------------------------------")
+	
 	elif choice == "move":
+
 		moveLocation(spillerObjekt)
+
+	elif choice == "location":
+
+		spillerObjekt.currentRoom()
+
+	elif choice == "inventory":
+		
+		spillerObjekt.getInventory()
+
+	elif choice == "healthpotion":
+
+		consumeHealthPot(spillerObjekt)
+
 	elif choice == "help":
+	
 		print("------------------------------")
-		print("Commands: status, move, help")
+		print("Commands: status, inventory, healthpotion, move, location, help")
 		print("------------------------------")
+	
 	else:
+	
 		print("Unknown choice")
 
 
@@ -24,42 +44,71 @@ def runtime(spillerObjekt):
 
 # the battle function, inputs spillerObject and encountered monsterObject
 def battleMonster(spillerObjekt, monsterObjekt):
-	
-	print("{} have encountered {}!! What would you like to do?".format(spillerObjekt.name, monsterObjekt.name))	
-	
+
 
 	# while the monster and the player is alive, execute the fight
 	while monsterObjekt.alive and spillerObjekt.alive:
+		print("{} have encountered {}!! What would you like to do?".format(spillerObjekt.name, monsterObjekt.name))	
 		choice = input("\nPress 1 for fighting the monster, 2 for fleeing: ")
+	
 		if choice == 1:
 			time.sleep(1)
-			print("\nYou've decided to fight the monster! You swing your weapon at him.")
+			print("--------------------------------------")
+			print("You swing your weapon at him!")
 			attackMonster(spillerObjekt, monsterObjekt)
 			time.sleep(1)
+	
 			if monsterObjekt.alive:
 				time.sleep(1)
 				monsterAttack(monsterObjekt, spillerObjekt)
+				print("--------------------------------------")
 
 		elif choice == 2:
+	
 			print("You're fleeing from {}! In the process he hits you one time with his weapon before you escape.".format(monsterObjekt.name))
 			monsterAttack(monsterObjekt, spillerObjekt)
+	
 			break
 	
 	#if boolean monsterObject.alive is FALSE, the player killed him and following code will execute
 	if not monsterObjekt.alive:
-		print("\nYou have killed the monster! He dropped the following loot: ")
-		monsterObjekt.getLoot()
-		print("\nWould you like to loot his items?")
-		choice = input("1 for looting and 2 for leaving them: ")
-		if choice == 1:
-			lootDead(spillerObjekt, monsterObjekt)
-			print("You looted its items.")
-		elif choice == 2:
-			print("You left his items on his dead corpse.")
+		print("\n-->You have killed the monster!<--")
+		
+		if not monsterObjekt.looted:
+
+			print("--------------------------------------")
+			print("He dropped the following loot:")
+			monsterObjekt.getLoot()			
+			print("\nWould you like to loot his items?")
+			print("--------------------------------------")
+			choice = input("1 for looting and 2 for leaving them: ")
+			
+			if choice == 1:
+				
+				lootDead(spillerObjekt, monsterObjekt)
+				print("--------------------------------------")
+				print("You looted its items.")
+				print("--------------------------------------")
+				monsterObjekt.looted = True
+			
+			elif choice == 2:
+				
+				print("--------------------------------------")
+				print("You left his items on his dead corpse.")
+				print("--------------------------------------")
+		
+		else:
+			print("You already looted this corpse")
+	
 	elif not spillerObjekt.alive:
+	
 		if spillerObjekt.life > 0:
 			print("The monster killed you....You lost a life")
 			spillerObjekt.minusLife()
+			spillerObjekt.health = 100
+			spillerObjekt.alive = True
+			monsterObjekt.health = 100
+	
 		else:
 			spillerObjekt.minusLife()
 
@@ -72,9 +121,16 @@ def encounterMonster(spillerObjekt):
 def whichMonster(location, room):
 
 	if (location == 1 and room == 2) or (location == 4 and room == 2):
+
 		return mapmodel.rooms[room]["montype"]
 
-
+def consumeHealthPot(spillerObjekt):
+	for x in spillerObjekt.inventory:
+		if x.hvilken == 2:
+			spillerObjekt.health += x.attribute
+			spillerObjekt.inventory.remove(x)
+			print("You consumed a health potion. New health: {}".format(spillerObjekt.health))
+			break
 
 
 
@@ -183,6 +239,7 @@ def lootDead(spillerObjekt, monsterObjekt):
 	playerinventory = spillerObjekt.inventory
 	for x in loot:
 		playerinventory.append(x)
+		loot.remove(x)
 
 
 
