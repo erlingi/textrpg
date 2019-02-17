@@ -123,12 +123,6 @@ class Monster:
 	def monsterAttack(self):
 		return self.dmg + 2	
 
-class Map:
-	def __init__(self, x, y, zoneName, monsterInZone):
-		self.x = x
-		self.y = y
-		self.zoneName = zoneName
-		self.monsterInZone = monsterInZone
 
 
 
