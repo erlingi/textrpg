@@ -11,13 +11,19 @@ class Player:
 		self.weapon = weapon
 		self.wallet = wallet
 		self.inventory = []
+		self.alive = True
 
 	def addInventory(self, leggTil):
 		self.leggTil = leggTil
 		self.inventory.append(leggTil)
 
 	def getInventory(self):
-		return self.inventory
+		print("Equipped weapon: {}".format(self.weapon.name))
+		for x in self.inventory:
+			if x.type == 1:
+				print(x.name, x.dmg, x.cost)
+			elif x.type == 2:
+				print(x.name, x.attribute)
 
 	def setHealth(self, newHealth):
 		self.newHealth = newHealth
@@ -30,10 +36,10 @@ class Player:
 		
 		if critChance >= 50:
 			playerDmg = ((self.weapon.dmg + random.randint(1,self.weapon.dmg)) * 2)
-			print(playerDmg)
+			return playerDmg
 			
 		else:
-			print(self.weapon.dmg + random.randint(1,self.weapon.dmg))
+			return (self.weapon.dmg + random.randint(1,self.weapon.dmg))
 
 
 # weapon class
@@ -42,12 +48,14 @@ class Weapon:
 		self.name = name
 		self.dmg = dmg
 		self.cost = cost
+		self.type = 1
 
 # consumable class
 class Consumable:
-	def __init__(self, name):
+	def __init__(self, name, attribute):
 		self.name = name
 		self.attribute = 50
+		self.type = 2
 
 
 
@@ -58,6 +66,7 @@ class Monster:
 		self.dmg = dmg
 		self.health = health
 		self.loot = []
+		self.alive = True
 
 	def addLoot(self, lootAdd):
 		self.lootAdd = lootAdd
@@ -66,5 +75,8 @@ class Monster:
 	def getLoot(self):
 		for x in range(len(self.loot)):
 			print(self.loot[x].name)
+
+	def monsterAttack(self):
+		return self.dmg + 2	
 
 
