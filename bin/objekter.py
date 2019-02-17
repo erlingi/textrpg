@@ -1,10 +1,12 @@
 #objekter
 
 import random
+from bin import mapmodel
 
 
 # player class
 class Player:
+
 	def __init__(self, name, health, weapon, wallet):
 		self.name = name
 		self.health = health
@@ -13,6 +15,10 @@ class Player:
 		self.inventory = []
 		self.alive = True
 		self.life = 5
+		self.location = 1
+
+	def status(self):
+		print("NAME: {}\nHEALTH: {} \nLIVES REMAINING: {} \nWEAPON: {} \nLOCATION: {}".format(self.name, self.health, self.life, self.weapon.name, mapmodel.rooms[self.location]["name"]))
 
 	def addInventory(self, leggTil):
 		self.leggTil = leggTil
@@ -29,6 +35,32 @@ class Player:
 	def setHealth(self, newHealth):
 		self.newHealth = newHealth
 		self.health = newHealth
+
+	def currentRoom(self):
+
+		if self.location == 1:
+			print("---------------------------------")
+			print("You are in room \"{}\" number {}".format(mapmodel.rooms[self.location]["name"], self.location))
+			print("\nYou can go to room number 2 \"{}\" in the east or 3 \"{}\" southbound".format(mapmodel.rooms[2]["name"], mapmodel.rooms[3]["name"]))
+			print("---------------------------------")		
+		elif self.location == 2:	
+			print("---------------------------------")			
+			print("You are in room \"{}\" number {}".format(mapmodel.rooms[self.location]["name"], self.location))
+			print("\nYou can go to room number 1 \"{}\" heading east or 4 \"{}\" southbound".format(mapmodel.rooms[1]["name"], mapmodel.rooms[4]["name"]))
+			print("---------------------------------")
+		elif self.location == 3:
+			print("---------------------------------")			
+			print("You are in room \"{}\" number {}".format(mapmodel.rooms[self.location]["name"], self.location))
+			print("\nYou can go to room number 1 \"{}\" north.".format(mapmodel.rooms[1]["name"]))
+			print("---------------------------------")			
+		elif self.location == 4:
+			print("---------------------------------")
+			print("You are in room \"{}\" number {}".format(mapmodel.rooms[self.location]["name"], self.location))
+			print("\nYou can go to room number 2 \"{}\" north".format(mapmodel.rooms[2]["name"]))			
+			print("---------------------------------")
+		else:
+			print("Unknown location")
+	
 
 	def playerAttack(self):
 		critChance = 0
@@ -91,4 +123,14 @@ class Monster:
 	def monsterAttack(self):
 		return self.dmg + 2	
 
+class Map:
+	def __init__(self, x, y, zoneName, monsterInZone):
+		self.x = x
+		self.y = y
+		self.zoneName = zoneName
+		self.monsterInZone = monsterInZone
 
+
+
+
+monster1 = Monster("Gorgo", 80, 100)

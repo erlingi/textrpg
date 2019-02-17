@@ -1,13 +1,33 @@
 # funksjoner
 
 from bin import objekter
+from bin import mapmodel
 import time
+
+def runtime(spillerObjekt):
+	choice = raw_input("CHOICE: ")
+	if choice == "status":
+		print("------------------------------")
+		print(spillerObjekt.status())
+		print("------------------------------")
+	elif choice == "move":
+		moveLocation(spillerObjekt)
+	elif choice == "help":
+		print("------------------------------")
+		print("Commands: status, move, help")
+		print("------------------------------")
+	else:
+		print("Unknown choice")
+
+
 
 
 # the battle function, inputs spillerObject and encountered monsterObject
 def battleMonster(spillerObjekt, monsterObjekt):
+	
 	print("{} have encountered {}!! What would you like to do?".format(spillerObjekt.name, monsterObjekt.name))	
 	
+
 	# while the monster and the player is alive, execute the fight
 	while monsterObjekt.alive and spillerObjekt.alive:
 		choice = input("\nPress 1 for fighting the monster, 2 for fleeing: ")
@@ -23,6 +43,7 @@ def battleMonster(spillerObjekt, monsterObjekt):
 		elif choice == 2:
 			print("You're fleeing from {}! In the process he hits you one time with his weapon before you escape.".format(monsterObjekt.name))
 			monsterAttack(monsterObjekt, spillerObjekt)
+			break
 	
 	#if boolean monsterObject.alive is FALSE, the player killed him and following code will execute
 	if not monsterObjekt.alive:
@@ -41,6 +62,68 @@ def battleMonster(spillerObjekt, monsterObjekt):
 			spillerObjekt.minusLife()
 		else:
 			spillerObjekt.minusLife()
+
+def encounterMonster(spillerObjekt):
+	if mapmodel.rooms[spillerObjekt.location]["monster"]:
+		return True
+
+def moveLocation(spillerObjekt):
+
+	lokasjon = spillerObjekt.location
+	spillerObjekt.currentRoom()
+	choice = input("Movement: ")
+	if lokasjon == 1:
+		if choice == 2:
+			spillerObjekt.location = choice
+			if encounterMonster(spillerObjekt):
+				battleMonster(spillerObjekt, objekter.monster1)
+			else:
+				spillerObjekt.currentRoom()
+		elif choice == 3:
+			spillerObjekt.location = choice
+			if encounterMonster(spillerObjekt):
+				battleMonster(spillerObjekt, objekter.monster1)
+			else:
+				spillerObjekt.currentRoom()
+		else:
+			print("Wrong movement")
+
+	if lokasjon == 2:
+		if choice == 1:
+			spillerObjekt.location = choice
+			if encounterMonster(spillerObjekt):
+				battleMonster(spillerObjekt, objekter.monster1)
+			else:
+				spillerObjekt.currentRoom()
+		elif choice == 4:
+			spillerObjekt.location = choice
+			if encounterMonster(spillerObjekt):
+				battleMonster(spillerObjekt, objekter.monster1)
+			else:
+				spillerObjekt.currentRoom()
+		else:
+			print("Wrong movement")
+
+	if lokasjon == 3:
+		if choice == 1:
+			spillerObjekt.location = choice
+			if encounterMonster(spillerObjekt):
+				battleMonster(spillerObjekt, objekter.monster1)
+			else:
+				spillerObjekt.currentRoom()
+		else:
+			print("Wrong movement")
+
+	if lokasjon == 4:
+		if choice == 2:
+			spillerObjekt.location = choice
+			if encounterMonster(spillerObjekt):
+				battleMonster(spillerObjekt, objekter.monster1)
+			else:
+				spillerObjekt.currentRoom()
+		else:
+			print("Wrong movement")
+
 
 
 

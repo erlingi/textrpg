@@ -20,8 +20,12 @@ monster1.addLoot(cons1)
 monster1.addLoot(cons2)
 #player1.getInventory()
 
+#while True:
+#	player1.currentRoom()
+#	funksjoner.moveLocation(player1)
 
-
+while True:
+	funksjoner.runtime(player1)
 
 #funksjoner.battleMonster(player1, monster1)
 
@@ -29,8 +33,8 @@ monster1.addLoot(cons2)
 
 #print(player1.hearts)
 #player1.minusHeart()
-funksjoner.battleMonster(player1, monster1)
-print(player1.life)
+#funksjoner.battleMonster(player1, monster1)
+#print(player1.life)
 
 
 #player1.addInventory("bag")
