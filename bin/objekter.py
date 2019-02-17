@@ -1,7 +1,7 @@
 #objekter
 
 import random
-from bin import mapmodel
+import mapmodel
 
 
 # player class
@@ -18,7 +18,7 @@ class Player:
 		self.location = 1
 
 	def status(self):
-		print("NAME: {}\nHEALTH: {} \nLIVES REMAINING: {} \nWEAPON: {} \nLOCATION: {}".format(self.name, self.health, self.life, self.weapon.name, mapmodel.rooms[self.location]["name"]))
+		return ("NAME: {}\nHEALTH: {} \nLIVES REMAINING: {} \nWEAPON: {} \nLOCATION: {}".format(self.name, self.health, self.life, self.weapon.name, mapmodel.rooms[self.location]["name"]))
 
 	def addInventory(self, leggTil):
 		self.leggTil = leggTil
@@ -124,7 +124,3 @@ class Monster:
 		return self.dmg + 2	
 
 
-
-
-
-monster1 = Monster("Gorgo", 80, 100)

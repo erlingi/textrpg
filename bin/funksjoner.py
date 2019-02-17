@@ -63,9 +63,21 @@ def battleMonster(spillerObjekt, monsterObjekt):
 		else:
 			spillerObjekt.minusLife()
 
+
 def encounterMonster(spillerObjekt):
+	
 	if mapmodel.rooms[spillerObjekt.location]["monster"]:
 		return True
+
+def whichMonster(location, room):
+
+	if (location == 1 and room == 2) or (location == 4 and room == 2):
+		return mapmodel.rooms[room]["montype"]
+
+
+
+
+
 
 def moveLocation(spillerObjekt):
 
@@ -76,13 +88,13 @@ def moveLocation(spillerObjekt):
 		if choice == 2:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, objekter.monster1)
+				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
 			else:
 				spillerObjekt.currentRoom()
 		elif choice == 3:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, objekter.monster1)
+				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
@@ -92,13 +104,13 @@ def moveLocation(spillerObjekt):
 		if choice == 1:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, objekter.monster1)
+				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
 			else:
 				spillerObjekt.currentRoom()
 		elif choice == 4:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, objekter.monster1)
+				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
@@ -108,7 +120,7 @@ def moveLocation(spillerObjekt):
 		if choice == 1:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, objekter.monster1)
+				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
@@ -118,7 +130,7 @@ def moveLocation(spillerObjekt):
 		if choice == 2:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, objekter.monster1)
+				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
