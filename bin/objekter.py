@@ -12,6 +12,7 @@ class Player:
 		self.wallet = wallet
 		self.inventory = []
 		self.alive = True
+		self.life = 5
 
 	def addInventory(self, leggTil):
 		self.leggTil = leggTil
@@ -41,6 +42,14 @@ class Player:
 		else:
 			return (self.weapon.dmg + random.randint(1,self.weapon.dmg))
 
+	def minusLife(self):
+		self.life -= 1
+		if self.life == 0:
+			print("You have no remaining lifes. You start over.")
+			# start over from beginning function
+		else:
+			print("You have {} lifes remaining.".format(self.life))
+
 
 # weapon class
 class Weapon:
@@ -54,7 +63,7 @@ class Weapon:
 class Consumable:
 	def __init__(self, name, attribute):
 		self.name = name
-		self.attribute = 50
+		self.attribute = attribute
 		self.type = 2
 
 
@@ -73,8 +82,11 @@ class Monster:
 		self.loot.append(lootAdd)
 
 	def getLoot(self):
-		for x in range(len(self.loot)):
-			print(self.loot[x].name)
+		for x in self.loot:
+			if x.type == 1:
+				print(x.name, x.dmg, x.cost)
+			elif x.type == 2:
+				print(x.name, x.attribute)
 
 	def monsterAttack(self):
 		return self.dmg + 2	
