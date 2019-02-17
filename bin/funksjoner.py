@@ -4,7 +4,9 @@ from bin import objekter
 from bin import mapmodel
 import time
 
+# game controller
 def runtime(spillerObjekt):
+	
 	choice = raw_input("CHOICE: ")
 	
 	if choice == "status":
@@ -21,6 +23,10 @@ def runtime(spillerObjekt):
 
 		spillerObjekt.currentRoom()
 
+	elif choice == "powerpotion":
+
+		consumePowerEnchantmentPot(spillerObjekt)
+
 	elif choice == "inventory":
 		
 		spillerObjekt.getInventory()
@@ -31,15 +37,20 @@ def runtime(spillerObjekt):
 
 	elif choice == "help":
 	
-		print("------------------------------")
-		print("Commands: status, inventory, healthpotion, move, location, help")
-		print("------------------------------")
+		gameHelp()
+
+	elif choice == "exit":
+
+		exit()
 	
 	else:
 	
 		print("Unknown choice")
 
-
+def gameHelp():
+	print("------------------------------")
+	print("Commands: status, inventory, healthpotion, powerpotion, move, location, help, exit")
+	print("------------------------------")
 
 
 # the battle function, inputs spillerObject and encountered monsterObject
@@ -100,6 +111,7 @@ def battleMonster(spillerObjekt, monsterObjekt):
 		else:
 			print("You already looted this corpse")
 	
+	# if player is not alive, the monster killed him and minusLife() is called upon
 	elif not spillerObjekt.alive:
 	
 		if spillerObjekt.life > 0:
@@ -118,80 +130,114 @@ def encounterMonster(spillerObjekt):
 	if mapmodel.rooms[spillerObjekt.location]["monster"]:
 		return True
 
-def whichMonster(location, room):
+def whichMonster(room):
 
-	if (location == 1 and room == 2) or (location == 4 and room == 2):
-
+	if (room == 2) or (room == 2):
 		return mapmodel.rooms[room]["montype"]
 
 def consumeHealthPot(spillerObjekt):
+	
+	# unless the players inventory returned a type2 consumable (health potion), the boolean will remain false.
+	foundHealthPotion = False
 	for x in spillerObjekt.inventory:
 		if x.hvilken == 2:
 			spillerObjekt.health += x.attribute
 			spillerObjekt.inventory.remove(x)
 			print("You consumed a health potion. New health: {}".format(spillerObjekt.health))
+			foundHealthPotion = True
 			break
 
+	# if iterating through the players inventory did not discover a health potion, foundHealthPotion will remain False
+	if foundHealthPotion == False:
+		print("You have no health potions")
 
+def consumePowerEnchantmentPot(spillerObjekt):
+	
+	# unless the players inventory returned a type3 consumable (power potion), the boolean will remain false.
+	foundPowerPotion = False
+	for x in spillerObjekt.inventory:
+		if x.hvilken == 3:
+			print("You enchanted you weapon with extra damage. New damage: {}+{}".format(spillerObjekt.weapon.dmg, x.attribute))
+			spillerObjekt.weapon.dmg += x.attribute
+			spillerObjekt.inventory.remove(x)
+			foundPowerPotion = True
+			break
 
+	# if iterating through the players inventory did not discover a power potion, foundPowerPotion will remain False
+	if foundPowerPotion == False:
+		print("You have no power potions")
+
+	
 
 def moveLocation(spillerObjekt):
 
 	lokasjon = spillerObjekt.location
 	spillerObjekt.currentRoom()
 	choice = input("Movement: ")
+	
+	# location: Home, 2 choices from movement: Toilet and Bedroom
 	if lokasjon == 1:
+		# toilet
 		if choice == 2:
 			spillerObjekt.location = choice
+			# if room contains a monster (encounterMonster==TRUE), engage battle with it and-
+			# figure out which monster object appropriate for the room with whichMonster() function
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
+				battleMonster(spillerObjekt, whichMonster(choice))
 			else:
 				spillerObjekt.currentRoom()
+		# bedroom
 		elif choice == 3:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
+				battleMonster(spillerObjekt, whichMonster(choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
 			print("Wrong movement")
 
+	# location: Toilet, 2 choices of movement: Home and Garden
 	if lokasjon == 2:
+		# home
 		if choice == 1:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
+				battleMonster(spillerObjekt, whichMonster(choice))
 			else:
 				spillerObjekt.currentRoom()
+		# garden
 		elif choice == 4:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
+				battleMonster(spillerObjekt, whichMonster(choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
 			print("Wrong movement")
 
+	# location: bedroom, 1 choice of movement: Home
 	if lokasjon == 3:
+		# home
 		if choice == 1:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
+				battleMonster(spillerObjekt, whichMonster(choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
 			print("Wrong movement")
 
+	# location: garden, 1 choice of movement: Toilet
 	if lokasjon == 4:
+		# toilet
 		if choice == 2:
 			spillerObjekt.location = choice
 			if encounterMonster(spillerObjekt):
-				battleMonster(spillerObjekt, whichMonster(lokasjon, choice))
+				battleMonster(spillerObjekt, whichMonster(choice))
 			else:
 				spillerObjekt.currentRoom()
 		else:
 			print("Wrong movement")
-
 
 
 
@@ -239,8 +285,5 @@ def lootDead(spillerObjekt, monsterObjekt):
 	playerinventory = spillerObjekt.inventory
 	for x in loot:
 		playerinventory.append(x)
+		#removes the loot from dead monsters inventory
 		loot.remove(x)
-
-
-
-
