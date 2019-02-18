@@ -25,13 +25,15 @@ class Player:
 		self.inventory.append(leggTil)
 
 	def getInventory(self):
+		print("----------------------------")
 		print("Equipped weapon: {}".format(self.weapon.name))
 		for x in self.inventory:
 			if x.hvilken == 1:
 				print(x.name, x.dmg, x.cost)
 			elif x.hvilken == 2 or x.hvilken == 3:
 				print(x.name, x.attribute)
-
+		print("----------------------------")
+		
 	def setHealth(self, newHealth):
 		self.newHealth = newHealth
 		self.health = newHealth
@@ -85,11 +87,12 @@ class Player:
 
 # weapon class
 class Weapon:
-	def __init__(self, name, dmg, cost):
+	def __init__(self, name, dmg, cost, wepid):
 		self.name = name
 		self.dmg = dmg
 		self.cost = cost
 		self.hvilken = 1
+		self.wepid = wepid
 
 # consumable class
 class Consumable:

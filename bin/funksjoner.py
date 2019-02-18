@@ -35,6 +35,10 @@ def runtime(spillerObjekt):
 
 		consumeHealthPot(spillerObjekt)
 
+	elif choice == "switchwep":
+
+		switchWeapon(spillerObjekt)
+
 	elif choice == "help":
 	
 		gameHelp()
@@ -48,9 +52,9 @@ def runtime(spillerObjekt):
 		print("Unknown choice")
 
 def gameHelp():
-	print("------------------------------")
-	print("Commands: status, inventory, healthpotion, powerpotion, move, location, help, exit")
-	print("------------------------------")
+	print("----------------------------------------------------------------------------------------------")
+	print("Commands: status, inventory, switchwep healthpotion, powerpotion, move, location, help, exit")
+	print("----------------------------------------------------------------------------------------------")
 
 
 # the battle function, inputs spillerObject and encountered monsterObject
@@ -58,9 +62,10 @@ def battleMonster(spillerObjekt, monsterObjekt):
 
 
 	# while the monster and the player is alive, execute the fight
+	print("{} have encountered {}!! What would you like to do?".format(spillerObjekt.name, monsterObjekt.name))
 	while monsterObjekt.alive and spillerObjekt.alive:
-		print("{} have encountered {}!! What would you like to do?".format(spillerObjekt.name, monsterObjekt.name))	
-		choice = input("\nPress 1 for fighting the monster, 2 for fleeing: ")
+			
+		choice = input("\n1: Fight the monster, 2: Flee combat (you will take a hit for running) ")
 	
 		if choice == 1:
 			time.sleep(1)
@@ -73,6 +78,7 @@ def battleMonster(spillerObjekt, monsterObjekt):
 				time.sleep(1)
 				monsterAttack(monsterObjekt, spillerObjekt)
 				print("--------------------------------------")
+				print("What would you like to do?")
 
 		elif choice == 2:
 	
@@ -105,7 +111,7 @@ def battleMonster(spillerObjekt, monsterObjekt):
 			elif choice == 2:
 				
 				print("--------------------------------------")
-				print("You left his items on his dead corpse.")
+				print("You left the items on its dead corpse.")
 				print("--------------------------------------")
 		
 		else:
@@ -127,11 +133,13 @@ def battleMonster(spillerObjekt, monsterObjekt):
 
 def encounterMonster(spillerObjekt):
 	
+	# checks if current room contains a monster in the mapmodel	
 	if mapmodel.rooms[spillerObjekt.location]["monster"]:
 		return True
 
 def whichMonster(room):
 
+	# if player is in the toilet, summon appropriate monster
 	if (room == 2) or (room == 2):
 		return mapmodel.rooms[room]["montype"]
 
@@ -167,6 +175,28 @@ def consumePowerEnchantmentPot(spillerObjekt):
 	if foundPowerPotion == False:
 		print("You have no power potions")
 
+def switchWeapon(spillerObjekt):
+
+	switched = False
+	print("---------------------------")
+	for x in spillerObjekt.inventory:
+		if hasattr(x, 'wepid'):
+			print("ID: {} | WEAPON: {}".format(x.wepid, x.name))
+		else:
+			pass
+	print("---------------------------")
+	choice = input("Which weapon would you like to equip? (Input ID): ")
+	for x in spillerObjekt.inventory:
+		if hasattr(x, 'wepid'):
+			if x.wepid == choice:
+				spillerObjekt.inventory.append(spillerObjekt.weapon)
+				spillerObjekt.weapon = x
+				spillerObjekt.inventory.remove(x)
+				switched = True
+				print("\nYou equipped {}\n".format(x.name))
+
+	if not switched:
+		print("You do not have that weapon or miss-spelled it. Retype switchwep command and try again")
 	
 
 def moveLocation(spillerObjekt):
